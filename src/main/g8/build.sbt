@@ -6,7 +6,7 @@ organization := "$organization$"
 
 scalaVersion := "2.13.1"
 
-version := "0.1.3"
+version := "0.1.0"
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging"           % "3.9.2",
@@ -38,3 +38,18 @@ gitCommitString := git.gitHeadCommit.value
 dockerAliases ++= Seq(
   dockerAlias.value.withTag(gitCommitString.value)
 )
+
+scalacOptions ++= Seq(
+  "-encoding",
+  "UTF-8",         // Encoding of source files
+  "-explaintypes", // Explain type errors in more detail
+  // Check https://www.threatstack.com/blog/useful-scala-compiler-options-part-3-linting for options below
+  "-Xlint:_,",
+  "-Xfatal-warnings",
+  "-Ywarn-numeric-widen", // Make implicit conversions visible
+  "-Ywarn-unused:patvars,-implicits", // Unused values in pattern matching
+  "-Ywarn-value-discard" // Unused values
+)
+
+addCommandAlias("fmt", "all scalafmtSbt scalafmtAll")
+addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheckAll")
